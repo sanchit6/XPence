@@ -1,0 +1,63 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.ss.xpence"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="16"
+        android:targetSdkVersion="16" />
+
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+
+    <application
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name=".Main"
+            android:label="@string/title_activity_main" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".TransactionsView"
+            android:label="@string/title_activity_transactions_view" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.ss.xpence.Main" />
+        </activity>
+        <activity
+            android:name=".AccountsView"
+            android:label="@string/title_activity_accounts_view" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.ss.xpence.Main" />
+        </activity>
+        <activity
+            android:name=".AccountEditor"
+            android:label="@string/title_activity_account_editor" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.ss.xpence.AccountsView" />
+        </activity>
+        <activity
+            android:name=".SendersManager"
+            android:label="@string/title_activity_senders_manager" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.ss.xpence.Main" />
+        </activity>
+        <activity
+            android:name=".Settings"
+            android:label="@string/title_activity_settings" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.ss.xpence.Main" />
+        </activity>
+    </application>
+
+</manifest>

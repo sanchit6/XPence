@@ -1,0 +1,89 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <GridLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:alignmentMode="alignBounds"
+        android:background="@color/LightCyan"
+        android:columnCount="1"
+        android:columnOrderPreserved="false"
+        android:useDefaultMargins="true" >
+
+        <TextView
+            android:id="@+id/textView_accName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Account Name"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="15dp" />
+        
+        <EditText
+            android:id="@+id/editText_accName"
+            android:background="@android:color/white"
+            android:ems="15"
+            android:inputType="text"
+            android:singleLine="true" >
+        </EditText>
+        
+        <TextView
+            android:id="@+id/textView_bank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bank Name"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="15dp" />
+
+        <EditText
+            android:id="@+id/editText_bank"
+            android:background="@android:color/white"
+            android:ems="15"
+            android:inputType="text"
+            android:singleLine="true" >
+        </EditText>
+
+        <TextView
+            android:id="@+id/textView_account"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Account Number"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="15dp" />
+
+        <EditText
+            android:id="@+id/editText_account"
+            android:background="@android:color/white"
+            android:ems="15"
+            android:inputType="number"
+            android:singleLine="true" >
+        </EditText>
+
+        <TextView
+            android:id="@+id/textView_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Card Number"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="15dp" />
+
+        <EditText
+            android:id="@+id/editText_card"
+            android:background="@android:color/white"
+            android:ems="15"
+            android:inputType="number"
+            android:singleLine="true" >
+        </EditText>
+
+        <Button
+            android:id="@+id/account_edit_submit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onFormSubmitted"
+            android:text="Submit" />
+    </GridLayout>
+
+</RelativeLayout>

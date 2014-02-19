@@ -1,0 +1,14 @@
+Spring integration
+Proper Settings Module
+Ability to hide the senders, but new senders should still be displayed ..
+Unique id matching of messages
+filter out / filter in regex for each parser regex definition
+
+persistence of parsed messages
+	controlled through settings
+	reload .. when?
+
+Notifications
+	NEw senders
+
+MVVM

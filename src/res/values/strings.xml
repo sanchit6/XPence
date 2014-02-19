@@ -1,0 +1,17 @@
+<resources>
+
+    <string name="app_name">XPence</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_main">XPence</string>
+    <string name="transactions">Transactions</string>
+    <string name="title_activity_transactions_view">Transactions</string>
+    <string name="title_activity_accounts_view">Accounts</string>
+    <string name="accounts">Accounts</string>
+    <string name="title_activity_account_editor">Account</string>
+    <string name="title_activity_senders_manager">SendersManager</string>
+    <string name="senders">Senders</string>
+    <string name="settings">Settings</string>
+    <string name="title_activity_settings">Settings</string>
+
+</resources>
