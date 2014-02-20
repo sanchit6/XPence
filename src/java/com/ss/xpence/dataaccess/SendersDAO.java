@@ -28,6 +28,7 @@ public class SendersDAO extends AbstractDAO<SenderModel> {
 					SenderModel model = new SenderModel();
 					model.setSender(c.getString(c.getColumnIndexOrThrow("sender_name")));
 					model.setSelectedBank(c.getString(c.getColumnIndexOrThrow("bank_name")));
+					model.setHidden(c.getInt(c.getColumnIndexOrThrow("hidden")) == 1 ? Boolean.TRUE : Boolean.FALSE);
 
 					response.add(model);
 
@@ -52,6 +53,7 @@ public class SendersDAO extends AbstractDAO<SenderModel> {
 
 		contentValues.put("sender_name", model.getSender());
 		contentValues.put("bank_name", model.getSelectedBank());
+		contentValues.put("hidden", model.hidden() ? 1 : 0);
 
 		return contentValues;
 	}

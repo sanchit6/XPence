@@ -9,6 +9,7 @@ import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ListView;
 
 import com.ss.xpence.adapter.SenderAdapter;
@@ -80,6 +81,21 @@ public class SendersManager extends Activity {
 				break;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	/**
+	 * @param context
+	 */
+	public void onShowHiddenClicked(View context) {
+		if (!(context instanceof CheckBox)) {
+			return;
+		}
+
+		CheckBox checkBox = (CheckBox) context;
+		boolean showHidden = checkBox.isChecked();
+		adapter.setShowHidden(showHidden);
+
+		adapter.resetAdapter();
 	}
 
 	/**

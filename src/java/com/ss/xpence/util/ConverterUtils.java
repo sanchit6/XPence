@@ -1,7 +1,10 @@
 package com.ss.xpence.util;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 public class ConverterUtils {
 
@@ -23,6 +26,12 @@ public class ConverterUtils {
 	public static String formatDate(Date date) {
 		SimpleDateFormat format = new SimpleDateFormat("d MMM yyyy HH:mm");
 		return format.format(date);
+	}
+
+	public static <T> List<T> clone(List<T> source) {
+		List<T> destination = new ArrayList<T>();
+		Collections.copy(destination, source);
+		return destination;
 	}
 
 }

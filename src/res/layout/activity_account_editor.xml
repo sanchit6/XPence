@@ -82,6 +82,7 @@
             android:id="@+id/account_edit_submit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            style="@style/btnStyleSandrift"
             android:onClick="onFormSubmitted"
             android:text="Submit" />
     </GridLayout>

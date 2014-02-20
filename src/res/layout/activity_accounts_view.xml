@@ -18,6 +18,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:onClick="onAddAccount"
+            style="@style/btnStyleSandrift"
             android:text="Add" />
         
         <Button
@@ -27,6 +28,7 @@
             android:layout_marginLeft="5dp"
             android:layout_marginTop="10dp"
             android:onClick="onClearAllAccounts"
+            style="@style/btnStyleSandrift"
             android:text="Delete All" />
         
     </LinearLayout>

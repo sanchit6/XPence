@@ -1,0 +1,59 @@
+    1  pwd
+    2  git help
+    3  pwd
+    4  git help config
+    5  got config --global user.name "Sanchit Srivastava"
+    6  git config --global user.name "Sanchit Srivastava"
+    7  git config --global user.email "sanchit.sriv@gmail.com"
+    8  pwd
+    9  mkdir ~/XPence
+   10  dir
+   11  ls
+   12  cd XPence/
+   13  git init
+   14  touch README
+   15  git add README
+   16  git commit -m "First Commit"
+   17  git remote add origin https://github.com/sanchit6/XPence
+   18  git push origin master
+   19  git pull
+   20  git help pull
+   21  git fetch https://github.com/sanchit6/XPence.git master
+   22  git fetch
+   23  git fetch master
+   24  git fetch https://github.com/sanchit6/XPence master
+   25  git fetch origin
+   26  git remote add origin https://github.com/sanchit6/XPence.git
+   27  git fetch origin/master
+   28  git fetch origin/XPence
+   29  git fetch XPence
+   30  git fetch https://github.com/sanchit6/XPence
+   31  history
+   32  git push origin master
+   33  git pull origin
+   34  git pull origin master
+   35  git push origin master
+   36  history
+   37  git add **/*
+   38  git add **/*.*
+   39  git status
+   40  git add src/*
+   41  git status\
+   42  git add src/.classpath
+   43  git add src/.project
+   44  git status
+   45  git add src/.settings/*
+   46  git status
+   47  git add src/assets/*
+   48  git status
+   49  git add src/java/**/*.java
+   50  git status
+   51  git add src/libs/*
+   52  git status
+   53  git add src/res/**/*
+   54  git status
+   55  history
+   56  git commit -m "Complete Project First Checkin"
+   57  git push origin master
+   58  history
+   59  history > commands.txt

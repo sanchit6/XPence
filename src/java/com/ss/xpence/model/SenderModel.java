@@ -8,6 +8,7 @@ public class SenderModel {
 	private String sender;
 	private String selectedBank;
 	private List<String> banks;
+	private boolean hidden;
 
 	public String getSelectedBank() {
 		return selectedBank;
@@ -34,6 +35,14 @@ public class SenderModel {
 
 	public void setBanks(List<String> banks) {
 		this.banks = banks;
+	}
+
+	public boolean hidden() {
+		return hidden;
+	}
+
+	public void setHidden(boolean hidden) {
+		this.hidden = hidden;
 	}
 
 }

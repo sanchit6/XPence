@@ -1,13 +1,17 @@
 package com.ss.xpence.adapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -17,21 +21,22 @@ import com.ss.xpence.model.SenderModel;
 public class SenderAdapter extends ArrayAdapter<SenderModel> {
 
 	private final Activity context;
+	private boolean showHidden;
 
-	private List<SenderModel> objects;
+	private final List<SenderModel> allObjects;
 
 	public SenderAdapter(Activity context, List<SenderModel> objects) {
-		super(context, R.layout.sender_mgr_layout, objects);
+		super(context, R.layout.sender_mgr_layout, clone(objects, false));
 		this.context = context;
 
-		this.objects = objects;
+		this.allObjects = objects;
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		View view = context.getLayoutInflater().inflate(R.layout.sender_mgr_layout, null);
-
 		SenderModel model = getItem(position);
+
+		View view = context.getLayoutInflater().inflate(R.layout.sender_mgr_layout, null);
 
 		TextView senderView = (TextView) view.findViewById(R.id.sm_sender);
 		Spinner banksView = (Spinner) view.findViewById(R.id.sm_banks);
@@ -53,10 +58,43 @@ public class SenderAdapter extends ArrayAdapter<SenderModel> {
 				TextView senderView = (TextView) layoutView.findViewById(R.id.sm_sender);
 				String sender = senderView.getText().toString();
 
-				updateSelectedItem(sender, value);
+				setSelectedBank(sender, value);
 			}
 
 			public void onNothingSelected(AdapterView<?> arg0) {
+			}
+		});
+
+		final ImageView addImage = (ImageView) view.findViewById(R.id.sm_add);
+		final ImageView remImage = (ImageView) view.findViewById(R.id.sm_remove);
+
+		if (model.hidden()) {
+			addImage.setVisibility(View.VISIBLE);
+			remImage.setVisibility(View.INVISIBLE);
+		} else {
+			addImage.setVisibility(View.INVISIBLE);
+			remImage.setVisibility(View.VISIBLE);
+		}
+
+		addImage.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				LinearLayout layout = (LinearLayout) v.getParent().getParent();
+
+				String sender = ((TextView) layout.findViewById(R.id.sm_sender)).getText().toString();
+				setHidden(sender, false);
+
+				resetAdapter();
+			}
+		});
+
+		remImage.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				LinearLayout layout = (LinearLayout) v.getParent().getParent();
+
+				String sender = ((TextView) layout.findViewById(R.id.sm_sender)).getText().toString();
+				setHidden(sender, true);
+
+				resetAdapter();
 			}
 		});
 
@@ -74,12 +112,43 @@ public class SenderAdapter extends ArrayAdapter<SenderModel> {
 		return 0;
 	}
 
-	private void updateSelectedItem(String sender, String value) {
-		for (SenderModel object : objects) {
+	private static List<SenderModel> clone(List<SenderModel> clone, boolean showHidden) {
+		List<SenderModel> destination = new ArrayList<SenderModel>();
+		for (SenderModel senderModel : clone) {
+			if (!showHidden && senderModel.hidden()) {
+				continue;
+			}
+			destination.add(senderModel);
+		}
+		return destination;
+	}
+
+	private void setHidden(String sender, boolean isHidden) {
+		for (SenderModel object : allObjects) {
+			if (object.getSender().equals(sender)) {
+				object.setHidden(isHidden);
+				break;
+			}
+		}
+	}
+
+	private void setSelectedBank(String sender, String value) {
+		for (SenderModel object : allObjects) {
 			if (object.getSender().equals(sender)) {
 				object.setSelectedBank(value);
+				break;
 			}
-
 		}
+	}
+
+	public void resetAdapter() {
+		this.clear();
+		this.addAll(clone(allObjects, showHidden));
+
+		this.notifyDataSetChanged();
+	}
+
+	public void setShowHidden(boolean showHidden) {
+		this.showHidden = showHidden;
 	}
 }
