@@ -1,6 +1,5 @@
 package com.ss.xpence.model;
 
-import com.ss.xpence.util.Constants.CardType;
 
 public class AccountModel {
 
@@ -10,7 +9,6 @@ public class AccountModel {
 
 	private String accountNumber;
 	private String cardNumber;
-	private CardType cardType;
 
 	public long getAccountId() {
 		return accountId;
@@ -42,14 +40,6 @@ public class AccountModel {
 
 	public void setBankName(String bankName) {
 		this.bankName = bankName;
-	}
-
-	public CardType getCardType() {
-		return cardType;
-	}
-
-	public void setCardType(CardType cardType) {
-		this.cardType = cardType;
 	}
 
 	public String getAccountName() {

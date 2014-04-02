@@ -1,16 +1,18 @@
 package com.ss.xpence;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup.MarginLayoutParams;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import com.ss.xpence.dataaccess.AccountsDAO;
 import com.ss.xpence.model.AccountModel;
-import com.ss.xpence.util.Constants.CardType;
 
 public class AccountEditor extends Activity {
 
@@ -61,7 +63,6 @@ public class AccountEditor extends Activity {
 		model.setAccountNumber(((EditText) findViewById(R.id.editText_account)).getText().toString());
 		model.setBankName(((EditText) findViewById(R.id.editText_bank)).getText().toString());
 		model.setCardNumber(((EditText) findViewById(R.id.editText_card)).getText().toString());
-		model.setCardType(CardType.DEBIT_CARD);
 
 		if (isExisting) {
 			accountsDAO.delete(getBaseContext(), String.valueOf(accountId));
@@ -71,6 +72,26 @@ public class AccountEditor extends Activity {
 		model.setAccountId(id);
 
 		NavUtils.navigateUpFromSameTask(this);
+	}
+
+	/**
+	 * @param view
+	 */
+	public void onAddCardRow(View view) {
+		EditText bet = (EditText) findViewById(R.id.editText_card);
+
+		EditText et = new EditText(getApplicationContext());
+		MarginLayoutParams marginLayoutParams = new MarginLayoutParams(182, bet.getLayoutParams().height);
+		marginLayoutParams.setMargins(0, 5, 0, 10);
+		et.setLayoutParams(marginLayoutParams);
+		et.setEms(13);
+		et.setInputType(bet.getInputType());
+		et.setSingleLine(true);
+		et.setBackgroundColor(Color.WHITE);
+		et.setTextColor(Color.BLACK);
+
+		LinearLayout layout = (LinearLayout) findViewById(R.id.dynamic_wrapper_cards);
+		layout.addView(et);
 	}
 
 	@Override

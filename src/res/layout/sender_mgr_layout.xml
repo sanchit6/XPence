@@ -19,28 +19,25 @@
         android:id="@+id/sm_banks"
         android:layout_width="100dp"
         android:layout_height="40dp"
-        android:layout_marginLeft="7dp"
-        android:layout_alignParentBottom="true" />
+        android:layout_marginLeft="7dp" />
 
     <RelativeLayout
         android:layout_width="100dp"
-        android:layout_height="40dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true" >
+        android:layout_height="40dp">
 
         <ImageButton
             android:id="@+id/sm_remove"
             style="@style/btnStyleSandrift"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="60dp"
+            android:layout_height="35dp"
             android:src="@drawable/remove"
             android:gravity="center" />
 
         <ImageButton
             android:id="@+id/sm_add"
             style="@style/btnStyleSandrift"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="60dp"
+            android:layout_height="35dp"
             android:src="@drawable/add"
             android:gravity="center" />
     </RelativeLayout>

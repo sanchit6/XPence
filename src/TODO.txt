@@ -1,8 +1,8 @@
 Spring integration
 Proper Settings Module
 Ability to hide the senders, but new senders should still be displayed ..
-Unique id matching of messages
-filter out / filter in regex for each parser regex definition
+
+filter out regex for each parser regex definition
 
 persistence of parsed messages
 	controlled through settings
@@ -12,3 +12,12 @@ Notifications
 	NEw senders
 
 MVVM
+
+
+----------------------
+DONE
+----------------------
+
+Ability to hide the senders
+Unique id matching of messages
+filter in regex for each parser regex definition

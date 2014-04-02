@@ -31,7 +31,7 @@ public class AccountsView extends Activity {
 
 		List<AccountModel> objects = accountsDAO.queryAll(getBaseContext());
 
-		AccountsAdapter adapter = new AccountsAdapter(this, objects);
+		AccountsAdapter adapter = new AccountsAdapter(this, objects, accountsDAO);
 
 		ListView listView = (ListView) findViewById(R.id.accounts_listing);
 		listView.setAdapter(adapter);
@@ -71,7 +71,16 @@ public class AccountsView extends Activity {
 
 		List<AccountModel> objects = accountsDAO.queryAll(getBaseContext());
 
-		AccountsAdapter adapter = new AccountsAdapter(this, objects);
+		AccountsAdapter adapter = new AccountsAdapter(this, objects, accountsDAO);
+
+		ListView listView = (ListView) findViewById(R.id.accounts_listing);
+		listView.setAdapter(adapter);
+	}
+
+	public void refreshList() {
+		List<AccountModel> objects = accountsDAO.queryAll(getBaseContext());
+
+		AccountsAdapter adapter = new AccountsAdapter(this, objects, accountsDAO);
 
 		ListView listView = (ListView) findViewById(R.id.accounts_listing);
 		listView.setAdapter(adapter);

@@ -38,31 +38,46 @@ public class SendersManager extends Activity {
 		List<String> banks = new ArrayList<String>();
 		banks.add("-");
 		for (AccountModel item : accountsDB.queryAll(this)) {
-			banks.add(item.getBankName());
+			if (!banks.contains(item.getBankName())) {
+				banks.add(item.getBankName());
+			}
 		}
 
-		objects = sendersDAO.queryAll(getBaseContext());
-
-		if (objects == null || objects.isEmpty()) {
-			objects = new ArrayList<SenderModel>();
-			for (String sender : MessagesHandler.fetchUniqueSenders(this)) {
-				if (sender.startsWith("+")) {
-					continue;
-				}
-
-				SenderModel model = new SenderModel();
-				model.setSender(sender);
-				model.setBanks(banks);
-				objects.add(model);
-			}
-		} else {
-			for (SenderModel sender : objects) {
+		List<SenderModel> dbList = sendersDAO.queryAll(getBaseContext());
+		if (dbList != null) {
+			for (SenderModel sender : dbList) {
 				sender.setBanks(banks);
 			}
 		}
 
+		List<SenderModel> msgList = new ArrayList<SenderModel>();
+		for (String sender : MessagesHandler.fetchUniqueSenders(this)) {
+			if (sender.startsWith("+")) {
+				continue;
+			}
+
+			SenderModel model = new SenderModel();
+			model.setSender(sender);
+			model.setBanks(banks);
+			msgList.add(model);
+		}
+
+		objects = merge(dbList, msgList);
+
 		adapter = new SenderAdapter(this, objects);
 		view.setAdapter(adapter);
+	}
+
+	private List<SenderModel> merge(List<SenderModel> dbList, List<SenderModel> msgList) {
+		List<SenderModel> mergedList = new ArrayList<SenderModel>(dbList);
+
+		for (SenderModel item : msgList) {
+			if (!mergedList.contains(item)) {
+				mergedList.add(item);
+			}
+		}
+
+		return mergedList;
 	}
 
 	@Override

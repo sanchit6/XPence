@@ -42,8 +42,7 @@ public class SenderAdapter extends ArrayAdapter<SenderModel> {
 		Spinner banksView = (Spinner) view.findViewById(R.id.sm_banks);
 
 		senderView.setText(model.getSender());
-		ArrayAdapter<String> banksAdapter = new ArrayAdapter<String>(context,
-			android.R.layout.simple_expandable_list_item_1, model.getBanks());
+		SimpleListItem1Adapter banksAdapter = new SimpleListItem1Adapter(context, model.getBanks());
 		banksView.setAdapter(banksAdapter);
 
 		banksView.setSelection(getPosition(model.getBanks(), model.getSelectedBank()));
@@ -51,6 +50,9 @@ public class SenderAdapter extends ArrayAdapter<SenderModel> {
 		banksView.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+				clearMargins(view);
+				clearMargins(view.findViewById(R.id.list_item_1));
+
 				Object item = parent.getItemAtPosition(pos);
 				String value = item.toString();
 
@@ -101,6 +103,14 @@ public class SenderAdapter extends ArrayAdapter<SenderModel> {
 		return view;
 	}
 
+	private void clearMargins(View view) {
+		if (view.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
+			ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
+			p.setMargins(7, 0, 0, 0);
+			view.requestLayout();
+		}
+	}
+
 	private int getPosition(List<String> banks, String selectedBank) {
 		int i = 0;
 		for (String bank : banks) {
@@ -112,9 +122,9 @@ public class SenderAdapter extends ArrayAdapter<SenderModel> {
 		return 0;
 	}
 
-	private static List<SenderModel> clone(List<SenderModel> clone, boolean showHidden) {
+	private static List<SenderModel> clone(List<SenderModel> source, boolean showHidden) {
 		List<SenderModel> destination = new ArrayList<SenderModel>();
-		for (SenderModel senderModel : clone) {
+		for (SenderModel senderModel : source) {
 			if (!showHidden && senderModel.hidden()) {
 				continue;
 			}

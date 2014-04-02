@@ -27,6 +27,7 @@ import com.ss.xpence.model.AccountModel;
 import com.ss.xpence.model.SMSModel;
 import com.ss.xpence.model.SenderModel;
 import com.ss.xpence.model.TransactionModel;
+import com.ss.xpence.model.meta.TransactionModelComparator;
 import com.ss.xpence.parser.AbstractParser;
 import com.ss.xpence.parser.ParserFactory;
 
@@ -100,6 +101,8 @@ public class TransactionsView extends FragmentActivity {
 			Fragment fragment = new TransactionsSectionFragment();
 			Bundle args = new Bundle();
 			args.putString(TransactionsSectionFragment.BANK_NAME, entities.get(i).getBankName());
+			args.putString(TransactionsSectionFragment.ACCOUNT_NO, entities.get(i).getAccountNumber());
+			args.putString(TransactionsSectionFragment.CARD_NO, entities.get(i).getCardNumber());
 			fragment.setArguments(args);
 			return fragment;
 		}
@@ -123,6 +126,8 @@ public class TransactionsView extends FragmentActivity {
 		}
 
 		public static final String BANK_NAME = "bankname";
+		public static final String ACCOUNT_NO = "accountno";
+		public static final String CARD_NO = "cardno";
 
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -130,10 +135,12 @@ public class TransactionsView extends FragmentActivity {
 
 			Bundle args = getArguments();
 			String bankName = args.getString(BANK_NAME);
+			String accountNo = args.getString(ACCOUNT_NO);
+			String cardNo = args.getString(CARD_NO);
 
-			loadTransactionList(bankName, container);
+			loadTransactionList(bankName, container, accountNo, cardNo);
 
-			Collections.sort(transactions);
+			Collections.sort(transactions, new TransactionModelComparator());
 
 			TransactionsAdapter adapter = new TransactionsAdapter(getActivity(), transactions);
 			view.setAdapter(adapter);
@@ -141,7 +148,7 @@ public class TransactionsView extends FragmentActivity {
 			return view;
 		}
 
-		private void loadTransactionList(String bankName, ViewGroup container) {
+		private void loadTransactionList(String bankName, ViewGroup container, String accountNo, String cardNo) {
 			if (transactions != null) {
 				return;
 			}
@@ -152,20 +159,20 @@ public class TransactionsView extends FragmentActivity {
 			for (SenderModel senderModel : allSenders) {
 				if (senderModel.getSelectedBank() != null && senderModel.getSelectedBank().equals(bankName)) {
 					List<?> messages = MessagesHandler.parseMessages(container.getContext(), senderModel.getSender());
-					loadTransactionList(messages, senderModel.getSender());
+					loadTransactionList(messages, senderModel.getSender(), accountNo, cardNo);
 				}
 			}
 		}
 
-		private void loadTransactionList(List<?> messages, String sender) {
-			AbstractParser parser;
+		private void loadTransactionList(List<?> messages, String sender, String accountNo, String cardNo) {
+			List<AbstractParser> parsers;
 			try {
-				parser = ParserFactory.makeParser(sender, this.getResources().getAssets());
+				parsers = ParserFactory.makeParser(sender, this.getResources().getAssets());
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
 
-			if (parser == null) {
+			if (parsers == null || parsers.isEmpty()) {
 				return;
 			}
 
@@ -175,15 +182,25 @@ public class TransactionsView extends FragmentActivity {
 				}
 
 				SMSModel msg = (SMSModel) o;
-				TransactionModel item = (TransactionModel) parser.parse(msg.getMessage());
 
-				if (item == null) {
-					continue;
+				for (AbstractParser parser : parsers) {
+					if (!parser.canParse(msg.getMessage(), accountNo, cardNo)) {
+						continue;
+					}
+
+					TransactionModel item = (TransactionModel) parser.parse(msg.getMessage());
+
+					if (item == null) {
+						continue;
+					}
+
+					item.setDate(msg.getReceivedOn());
+					item.setParentModel(msg);
+					transactions.add(item);
+					break;
 				}
-
-				item.setDate(msg.getReceivedOn());
-				transactions.add(item);
 			}
 		}
+
 	}
 }

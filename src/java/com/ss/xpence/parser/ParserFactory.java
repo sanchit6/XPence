@@ -3,7 +3,9 @@ package com.ss.xpence.parser;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -15,27 +17,43 @@ public class ParserFactory {
 	private static boolean init = false;
 
 	private static Properties props = new Properties();
-	private static Map<String, AbstractParser> parserCache = new HashMap<String, AbstractParser>();
+	private static Map<String, List<AbstractParser>> parserCache = new HashMap<String, List<AbstractParser>>();
 
-	public static AbstractParser makeParser(String sender, AssetManager assetManager) throws IOException {
+	public static List<AbstractParser> makeParser(String sender, AssetManager assetManager) throws IOException {
 		init(assetManager);
 
 		if (parserCache.containsKey(sender)) {
 			return parserCache.get(sender);
 		}
 
-		BaseRegexParser parser = new BaseRegexParser();
-		parserCache.put(sender, parser);
-
-		initParser(parser, sender);
-
-		return parser;
+		parserCache.put(sender, new ArrayList<AbstractParser>());
+		parserCache.get(sender).addAll(newParser(sender));
+		return parserCache.get(sender);
 	}
 
-	private static void initParser(BaseRegexParser parser, String sender) {
-		parser.setAmountRegex(props.getProperty("amount-" + sender));
-		parser.setLocationRegex(props.getProperty("location-" + sender));
-		parser.setUniqueIdRegex(props.getProperty("uniqueid-" + sender));
+	private static List<AbstractParser> newParser(String sender) {
+		int iterator = 1;
+
+		List<AbstractParser> parsers = new ArrayList<AbstractParser>();
+
+		while (true) {
+			String key = sender + "-" + iterator;
+			String regexAmount = props.getProperty("amount-" + key);
+
+			if (regexAmount == null) {
+				break;
+			}
+
+			BaseRegexParser parser = new BaseRegexParser();
+			parser.setAmountRegex(regexAmount);
+			parser.setLocationRegex(props.getProperty("location-" + key));
+			parser.setContainsRegex(props.getProperty("contains-" + key));
+
+			parsers.add(parser);
+			++iterator;
+		}
+
+		return parsers;
 	}
 
 	private static void init(AssetManager assetManager) throws IOException {

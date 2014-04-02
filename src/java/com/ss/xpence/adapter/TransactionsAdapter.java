@@ -5,6 +5,7 @@ import java.util.List;
 import android.app.Activity;
 import android.graphics.Color;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import com.ss.xpence.R;
 import com.ss.xpence.model.TransactionModel;
 import com.ss.xpence.util.ConverterUtils;
+import com.ss.xpence.view.dialog.MessageDialog;
 
 public class TransactionsAdapter extends ArrayAdapter<TransactionModel> {
 
@@ -38,7 +40,7 @@ public class TransactionsAdapter extends ArrayAdapter<TransactionModel> {
 		TextView amountLabel = (TextView) view.findViewById(R.id.label_tran_notf_amount);
 		TextView locLabel = (TextView) view.findViewById(R.id.label_tran_notf_loc);
 
-		TransactionModel transactionModel = getItem(position);
+		final TransactionModel transactionModel = getItem(position);
 
 		String dateValue = ConverterUtils.safeToString(ConverterUtils.formatDate(transactionModel.getDate()));
 		String amountValue = ConverterUtils.safeToString(transactionModel.getAmount());
@@ -60,6 +62,13 @@ public class TransactionsAdapter extends ArrayAdapter<TransactionModel> {
 				amountLabel.setTextColor(Color.WHITE);
 			}
 		}
+
+		layout.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				new MessageDialog(transactionModel.getParentModel().getMessage()).show(context.getFragmentManager(),
+					"1");
+			}
+		});
 
 		return view;
 	}

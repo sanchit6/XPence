@@ -9,7 +9,6 @@ import android.database.Cursor;
 
 import com.ss.xpence.dataaccess.base.AbstractDAO;
 import com.ss.xpence.model.AccountModel;
-import com.ss.xpence.util.Constants.CardType;
 import com.ss.xpence.util.IOUtils;
 
 public class AccountsDAO extends AbstractDAO<AccountModel> {
@@ -29,7 +28,6 @@ public class AccountsDAO extends AbstractDAO<AccountModel> {
 					AccountModel model = new AccountModel();
 					model.setAccountName(c.getString(c.getColumnIndexOrThrow("account_name")));
 					model.setBankName(c.getString(c.getColumnIndexOrThrow("bank_name")));
-					model.setCardType(CardType.valueOf(c.getString(c.getColumnIndexOrThrow("card_type"))));
 					model.setAccountNumber(c.getString(c.getColumnIndexOrThrow("account_number")));
 					model.setCardNumber(c.getString(c.getColumnIndexOrThrow("card_number")));
 					model.setAccountId(c.getInt(c.getColumnIndexOrThrow("_id")));
@@ -57,7 +55,7 @@ public class AccountsDAO extends AbstractDAO<AccountModel> {
 
 		contentValues.put("account_name", model.getAccountName());
 		contentValues.put("bank_name", model.getBankName());
-		contentValues.put("card_type", model.getCardType().toString());
+		contentValues.put("card_type", "DUM");
 		contentValues.put("account_number", model.getAccountNumber());
 		contentValues.put("card_number", model.getCardNumber());
 

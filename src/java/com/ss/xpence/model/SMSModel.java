@@ -11,12 +11,15 @@ public class SMSModel implements Serializable {
 	public String getMessage() {
 		return message;
 	}
+
 	public void setMessage(String message) {
 		this.message = message;
 	}
+
 	public Date getReceivedOn() {
 		return (Date) receivedOn.clone();
 	}
+
 	public void setReceivedOn(Date receivedOn) {
 		this.receivedOn = (Date) receivedOn.clone();
 	}
