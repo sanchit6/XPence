@@ -19,26 +19,26 @@ public class ParserFactory {
 	private static Properties props = new Properties();
 	private static Map<String, List<AbstractParser>> parserCache = new HashMap<String, List<AbstractParser>>();
 
-	public static List<AbstractParser> makeParser(String sender, AssetManager assetManager) throws IOException {
+	public static List<AbstractParser> makeParser(String key, AssetManager assetManager) throws IOException {
 		init(assetManager);
 
-		if (parserCache.containsKey(sender)) {
-			return parserCache.get(sender);
+		if (parserCache.containsKey(key)) {
+			return parserCache.get(key);
 		}
 
-		parserCache.put(sender, new ArrayList<AbstractParser>());
-		parserCache.get(sender).addAll(newParser(sender));
-		return parserCache.get(sender);
+		parserCache.put(key, new ArrayList<AbstractParser>());
+		parserCache.get(key).addAll(newParser(key));
+		return parserCache.get(key);
 	}
 
-	private static List<AbstractParser> newParser(String sender) {
+	private static List<AbstractParser> newParser(String key) {
 		int iterator = 1;
 
 		List<AbstractParser> parsers = new ArrayList<AbstractParser>();
 
 		while (true) {
-			String key = sender + "-" + iterator;
-			String regexAmount = props.getProperty("amount-" + key);
+			String x = key + "-" + iterator;
+			String regexAmount = props.getProperty("amount-" + x);
 
 			if (regexAmount == null) {
 				break;
@@ -46,8 +46,8 @@ public class ParserFactory {
 
 			BaseRegexParser parser = new BaseRegexParser();
 			parser.setAmountRegex(regexAmount);
-			parser.setLocationRegex(props.getProperty("location-" + key));
-			parser.setContainsRegex(props.getProperty("contains-" + key));
+			parser.setLocationRegex(props.getProperty("location-" + x));
+			parser.setContainsRegex(props.getProperty("contains-" + x));
 
 			parsers.add(parser);
 			++iterator;
@@ -64,7 +64,7 @@ public class ParserFactory {
 		InputStream stream = null;
 		InputStreamReader reader = null;
 		try {
-			stream = assetManager.open("sender-regex.properties");
+			stream = assetManager.open("bank-regex.properties");
 			reader = new InputStreamReader(stream);
 			props.load(reader);
 		} finally {

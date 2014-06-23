@@ -92,10 +92,45 @@ public class SendersManager extends Activity {
 			case android.R.id.home:
 				NavUtils.navigateUpFromSameTask(this);
 				return true;
+			case R.id.senders_guess_all:
+				guessSelectedItemOnModel(true);
+				break;
+			case R.id.senders_guess_unset:
+				guessSelectedItemOnModel(false);
+				break;
+			case R.id.senders_reset:
+				resetSelectedItemOnModel();
+				break;
+			case R.id.senders_save:
+				onPersistData();
+				break;
 			default:
 				break;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	private void guessSelectedItemOnModel(boolean all) {
+		for (SenderModel model : objects) {
+			if (all || model.getSelectedBank() == null || model.getSelectedBank().equals("-")) {
+				for (String bank : model.getBanks()) {
+					if (!bank.equals("-") && model.getSender().toLowerCase().contains(bank.toLowerCase())) {
+						model.setSelectedBank(bank);
+						break;
+					}
+				}
+			}
+		}
+
+		adapter.resetAdapter();
+	}
+
+	private void resetSelectedItemOnModel() {
+		for (SenderModel model : objects) {
+			model.setSelectedBank("-");
+		}
+
+		adapter.resetAdapter();
 	}
 
 	/**
@@ -113,10 +148,7 @@ public class SendersManager extends Activity {
 		adapter.resetAdapter();
 	}
 
-	/**
-	 * @param context
-	 */
-	public void onPersistData(View context) {
+	public void onPersistData() {
 		sendersDAO.clear(getBaseContext());
 
 		for (SenderModel model : objects) {

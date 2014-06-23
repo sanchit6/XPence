@@ -4,11 +4,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SenderModel {
-
+	private long senderId;
 	private String sender;
 	private String selectedBank;
 	private List<String> banks;
 	private boolean hidden;
+
+	public static SenderModel create(long senderId) {
+		SenderModel m = new SenderModel();
+		m.setSenderId(senderId);
+		return m;
+	}
+
+	public long getSenderId() {
+		return senderId;
+	}
+
+	public void setSenderId(long senderId) {
+		this.senderId = senderId;
+	}
 
 	public String getSelectedBank() {
 		return selectedBank;

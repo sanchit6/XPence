@@ -13,5 +13,12 @@
     <string name="senders">Senders</string>
     <string name="settings">Settings</string>
     <string name="title_activity_settings">Settings</string>
+    <string name="clear_transactions_from_db">Recreate Database</string>
+    <string name="senders_guess_unset">Guess Unset</string>
+    <string name="senders_guess_all">Guess All</string>
+    <string name="reset">Reset</string>
+    <string name="add_new">Add New</string>
+    <string name="delete_all">Delete All</string>
+    <string name="save">Save</string>
 
 </resources>

@@ -17,12 +17,12 @@ public class SendersDAO extends AbstractDAO<SenderModel> {
 
 	public List<SenderModel> queryAll(Context context) {
 		init(context);
-
-		Cursor c = database.query(TABLE_NAME, null, null, null, null, null, null);
-
 		List<SenderModel> response = new ArrayList<SenderModel>();
+		Cursor c = null;
 
 		try {
+			c = database.query(TABLE_NAME, null, null, null, null, null, null);
+
 			if (c.moveToFirst()) {
 				for (int i = 0; i < c.getCount(); i++) {
 					SenderModel model = new SenderModel();

@@ -1,6 +1,21 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/menu_settings"
-        android:title="@string/menu_settings"
+    <item android:id="@+id/senders_guess_all"
+        android:title="@string/senders_guess_all"
         android:orderInCategory="100"
+        android:showAsAction="never" />
+    
+    <item android:id="@+id/senders_guess_unset"
+        android:title="@string/senders_guess_unset"
+        android:orderInCategory="101"
+        android:showAsAction="never" />
+    
+    <item android:id="@+id/senders_reset"
+        android:title="@string/reset"
+        android:orderInCategory="99"
+        android:showAsAction="never" />
+    
+    <item android:id="@+id/senders_save"
+        android:title="@string/save"
+        android:orderInCategory="102"
         android:showAsAction="never" />
 </menu>

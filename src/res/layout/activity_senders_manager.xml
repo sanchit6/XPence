@@ -10,17 +10,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
-
-        <Button
-            android:id="@+id/sen_button"
-            android:layout_width="70dp"
-            android:layout_height="45dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:onClick="onPersistData"
-            style="@style/btnStyleSandrift"
-            android:text="Save" />
-
         <CheckBox
             android:id="@+id/sen_checkbox1"
             android:layout_width="wrap_content"

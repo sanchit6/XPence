@@ -6,7 +6,15 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import com.ss.xpence.model.AccountModel.CardModel;
+
 public class ConverterUtils {
+
+	public static CardModel toCardModel(String cardNumber) {
+		CardModel m = new CardModel();
+		m.setCardNumber(cardNumber);
+		return m;
+	}
 
 	public static String safeToString(Object obj) {
 		return obj == null ? null : obj.toString();
@@ -32,6 +40,17 @@ public class ConverterUtils {
 		List<T> destination = new ArrayList<T>();
 		Collections.copy(destination, source);
 		return destination;
+	}
+
+	public static String accumulate(List<String> items, String separator) {
+		StringBuilder b = new StringBuilder();
+		if (items != null) {
+			for (String item : items) {
+				b.append(item).append(separator);
+			}
+		}
+
+		return b.length() > 0 ? b.substring(0, b.length() - 1).toString() : "";
 	}
 
 }

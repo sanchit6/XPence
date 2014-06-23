@@ -93,5 +93,14 @@
             android:onClick="onLoadSettings"
             android:text="@string/settings" />
     </LinearLayout>
+    
+    <ListView
+        android:id="@+id/main_screen_listing"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_columnSpan="2"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp" >
+    </ListView>
 
 </GridLayout>

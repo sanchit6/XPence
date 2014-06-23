@@ -3,6 +3,9 @@ package com.ss.xpence.dataaccess.base;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
@@ -86,6 +89,17 @@ public abstract class AbstractDAO<T> implements GenericDAO {
 
 	protected abstract ContentValues modelToContentValues(T model);
 
+	public abstract List<T> queryAll(Context context);
+
+	/**
+	 * @param context
+	 * @param filter
+	 * @return List of Items
+	 */
+	public List<T> queryByFilter(Context context, Filter filter) {
+		return null;
+	}
+
 	private static class DBHelper extends SQLiteOpenHelper {
 		AbstractDAO<?> abstractDAO;
 
@@ -108,6 +122,24 @@ public abstract class AbstractDAO<T> implements GenericDAO {
 			onCreate(db);
 		}
 
+	}
+
+	public static class Filter {
+		private Map<String, Object> filters = new HashMap<String, Object>();
+
+		public Object get(String key) {
+			return filters.get(key);
+		}
+
+		public void put(String key, Object value) {
+			filters.put(key, value);
+		}
+
+		public static Filter create(String key, Object value) {
+			Filter f = new Filter();
+			f.put(key, value);
+			return f;
+		}
 	}
 
 }

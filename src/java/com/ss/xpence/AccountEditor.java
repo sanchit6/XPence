@@ -4,15 +4,18 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup.MarginLayoutParams;
 import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.GridLayout;
+import android.widget.Space;
 
 import com.ss.xpence.dataaccess.AccountsDAO;
 import com.ss.xpence.model.AccountModel;
+import com.ss.xpence.util.ConverterUtils;
+import com.ss.xpence.view.DummyView;
 
 public class AccountEditor extends Activity {
 
@@ -32,13 +35,26 @@ public class AccountEditor extends Activity {
 		if (bundle != null) {
 			String bank = bundle.getString("1");
 			String account = bundle.getString("2");
-			String card = bundle.getString("3");
+			String cardNo = bundle.getString("3");
 			String accName = bundle.getString("4");
 
 			((EditText) findViewById(R.id.editText_account)).setText(account);
 			((EditText) findViewById(R.id.editText_bank)).setText(bank);
-			((EditText) findViewById(R.id.editText_card)).setText(card);
 			((EditText) findViewById(R.id.editText_accName)).setText(accName);
+
+			if (!cardNo.contains(",")) {
+				((EditText) findViewById(R.id.editText_card)).setText(cardNo);
+			} else {
+				String[] cards = cardNo.split(",");
+				((EditText) findViewById(R.id.editText_card)).setText(cards[0]);
+
+				for (int i = 1; i < cards.length; i++) {
+					String card = cards[i];
+
+					DummyView v = DummyView.create("text", card, getBaseContext());
+					onAddCardRow(v);
+				}
+			}
 
 			isExisting = true;
 			accountId = Long.valueOf(bundle.getString("-1"));
@@ -62,7 +78,24 @@ public class AccountEditor extends Activity {
 		model.setAccountName(((EditText) findViewById(R.id.editText_accName)).getText().toString());
 		model.setAccountNumber(((EditText) findViewById(R.id.editText_account)).getText().toString());
 		model.setBankName(((EditText) findViewById(R.id.editText_bank)).getText().toString());
-		model.setCardNumber(((EditText) findViewById(R.id.editText_card)).getText().toString());
+		model.getCardModels().add(
+			ConverterUtils.toCardModel((((EditText) findViewById(R.id.editText_card)).getText().toString())));
+
+		GridLayout layout = (GridLayout) findViewById(R.id.dynamic_wrapper_cards);
+		int count = layout.getChildCount();
+		for (int i = count - 1; i >= 0; --i) {
+			View child = layout.getChildAt(i);
+
+			if (child.getId() == R.id.addCardIcon) {
+				break;
+			}
+
+			if (!(child instanceof EditText)) {
+				continue;
+			}
+
+			model.getCardModels().add(ConverterUtils.toCardModel((((EditText) child).getText().toString())));
+		}
 
 		if (isExisting) {
 			accountsDAO.delete(getBaseContext(), String.valueOf(accountId));
@@ -78,20 +111,28 @@ public class AccountEditor extends Activity {
 	 * @param view
 	 */
 	public void onAddCardRow(View view) {
-		EditText bet = (EditText) findViewById(R.id.editText_card);
+		// EditText bet = (EditText) findViewById(R.id.editText_card);
 
-		EditText et = new EditText(getApplicationContext());
-		MarginLayoutParams marginLayoutParams = new MarginLayoutParams(182, bet.getLayoutParams().height);
-		marginLayoutParams.setMargins(0, 5, 0, 10);
-		et.setLayoutParams(marginLayoutParams);
-		et.setEms(13);
-		et.setInputType(bet.getInputType());
+		EditText et = new EditText(getBaseContext());
+		// MarginLayoutParams marginLayoutParams = new
+		// MarginLayoutParams(LayoutParams.WRAP_CONTENT,
+		// LayoutParams.WRAP_CONTENT);
+		// marginLayoutParams.setMargins(0, 5, 0, 10);
+		// et.setLayoutParams(marginLayoutParams);
+		et.setEms(11);
+		et.setInputType(InputType.TYPE_CLASS_NUMBER);
 		et.setSingleLine(true);
 		et.setBackgroundColor(Color.WHITE);
 		et.setTextColor(Color.BLACK);
+		et.setHint("Enter Card No.");
 
-		LinearLayout layout = (LinearLayout) findViewById(R.id.dynamic_wrapper_cards);
+		if (view instanceof DummyView) {
+			et.setText(((DummyView) view).get("text"));
+		}
+
+		GridLayout layout = (GridLayout) findViewById(R.id.dynamic_wrapper_cards);
 		layout.addView(et);
+		layout.addView(new Space(getBaseContext()));
 	}
 
 	@Override

@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.ss.xpence.R;
 import com.ss.xpence.model.SenderModel;
+import com.ss.xpence.view.ViewHolder;
 
 public class SenderAdapter extends ArrayAdapter<SenderModel> {
 
@@ -32,43 +33,54 @@ public class SenderAdapter extends ArrayAdapter<SenderModel> {
 		this.allObjects = objects;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
+		ViewHolder<TextView> h1 = new ViewHolder<TextView>();
+		ViewHolder<Spinner> h2 = new ViewHolder<Spinner>();
+
+		if (convertView == null) {
+			convertView = context.getLayoutInflater().inflate(R.layout.sender_mgr_layout, null);
+
+			h1.set((TextView) convertView.findViewById(R.id.sm_sender));
+			convertView.setTag(R.id.sm_sender, h1);
+
+			h2.set((Spinner) convertView.findViewById(R.id.sm_banks));
+			convertView.setTag(R.id.sm_banks, h2);
+
+			h2.get().setOnItemSelectedListener(new OnItemSelectedListener() {
+				public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+					clearMargins(view);
+					clearMargins(view.findViewById(R.id.list_item_1));
+
+					Object item = parent.getItemAtPosition(pos);
+					String value = item.toString();
+
+					View layoutView = (View) view.getParent().getParent();
+					TextView senderView = (TextView) layoutView.findViewById(R.id.sm_sender);
+					String sender = senderView.getText().toString();
+
+					setSelectedBank(sender, value);
+				}
+
+				public void onNothingSelected(AdapterView<?> arg0) {
+				}
+			});
+		} else {
+			h1 = (ViewHolder<TextView>) convertView.getTag(R.id.sm_sender);
+			h2 = (ViewHolder<Spinner>) convertView.getTag(R.id.sm_banks);
+		}
+
 		SenderModel model = getItem(position);
 
-		View view = context.getLayoutInflater().inflate(R.layout.sender_mgr_layout, null);
-
-		TextView senderView = (TextView) view.findViewById(R.id.sm_sender);
-		Spinner banksView = (Spinner) view.findViewById(R.id.sm_banks);
-
-		senderView.setText(model.getSender());
+		h1.get().setText(model.getSender());
 		SimpleListItem1Adapter banksAdapter = new SimpleListItem1Adapter(context, model.getBanks());
-		banksView.setAdapter(banksAdapter);
+		h2.get().setAdapter(banksAdapter);
 
-		banksView.setSelection(getPosition(model.getBanks(), model.getSelectedBank()));
+		h2.get().setSelection(model.getBanks().indexOf(model.getSelectedBank()));
 
-		banksView.setOnItemSelectedListener(new OnItemSelectedListener() {
-
-			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-				clearMargins(view);
-				clearMargins(view.findViewById(R.id.list_item_1));
-
-				Object item = parent.getItemAtPosition(pos);
-				String value = item.toString();
-
-				View layoutView = (View) view.getParent().getParent();
-				TextView senderView = (TextView) layoutView.findViewById(R.id.sm_sender);
-				String sender = senderView.getText().toString();
-
-				setSelectedBank(sender, value);
-			}
-
-			public void onNothingSelected(AdapterView<?> arg0) {
-			}
-		});
-
-		final ImageView addImage = (ImageView) view.findViewById(R.id.sm_add);
-		final ImageView remImage = (ImageView) view.findViewById(R.id.sm_remove);
+		final ImageView addImage = (ImageView) convertView.findViewById(R.id.sm_add);
+		final ImageView remImage = (ImageView) convertView.findViewById(R.id.sm_remove);
 
 		if (model.hidden()) {
 			addImage.setVisibility(View.VISIBLE);
@@ -100,26 +112,16 @@ public class SenderAdapter extends ArrayAdapter<SenderModel> {
 			}
 		});
 
-		return view;
+		return convertView;
 	}
 
 	private void clearMargins(View view) {
-		if (view.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
+		if (view != null && view.getLayoutParams() != null
+			&& view.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
 			ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
 			p.setMargins(7, 0, 0, 0);
 			view.requestLayout();
 		}
-	}
-
-	private int getPosition(List<String> banks, String selectedBank) {
-		int i = 0;
-		for (String bank : banks) {
-			if (bank.equals(selectedBank)) {
-				return i;
-			}
-			++i;
-		}
-		return 0;
 	}
 
 	private static List<SenderModel> clone(List<SenderModel> source, boolean showHidden) {

@@ -3,12 +3,14 @@ package com.ss.xpence;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ListView;
 
 import com.ss.xpence.adapter.AccountsAdapter;
@@ -16,6 +18,9 @@ import com.ss.xpence.dataaccess.AccountsDAO;
 import com.ss.xpence.model.AccountModel;
 
 public class AccountsView extends Activity {
+
+	List<AccountModel> objects = null;
+	AccountsAdapter adapter = null;
 
 	private AccountsDAO accountsDAO;
 
@@ -29,9 +34,9 @@ public class AccountsView extends Activity {
 		setContentView(R.layout.activity_accounts_view);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 
-		List<AccountModel> objects = accountsDAO.queryAll(getBaseContext());
+		objects = accountsDAO.queryAll(getBaseContext());
 
-		AccountsAdapter adapter = new AccountsAdapter(this, objects, accountsDAO);
+		adapter = new AccountsAdapter(this, objects, accountsDAO);
 
 		ListView listView = (ListView) findViewById(R.id.accounts_listing);
 		listView.setAdapter(adapter);
@@ -49,32 +54,36 @@ public class AccountsView extends Activity {
 			case android.R.id.home:
 				NavUtils.navigateUpFromSameTask(this);
 				return true;
+			case R.id.accounts_view_add_new:
+				onAddAccount();
+				break;
+			case R.id.accounts_view_delete_all:
+
+				new AlertDialog.Builder(this).setTitle("CONFIRM").setMessage("Delete All Accounts??")
+					.setPositiveButton("Yes", new OnClickListener() {
+						public void onClick(DialogInterface dialog, int id) {
+							onClearAllAccounts();
+						}
+					}).setNegativeButton("Cancel", null).show();
+				break;
 			default:
 				break;
 		}
 		return super.onOptionsItemSelected(item);
 	}
 
-	/**
-	 * @param context
-	 */
-	public void onAddAccount(View context) {
+	private void onAddAccount() {
 		Intent intent = new Intent(getBaseContext(), AccountEditor.class);
 		startActivity(intent);
 	}
 
-	/**
-	 * @param context
-	 */
-	public void onClearAllAccounts(View context) {
+	private void onClearAllAccounts() {
 		accountsDAO.clear(getBaseContext());
 
-		List<AccountModel> objects = accountsDAO.queryAll(getBaseContext());
-
-		AccountsAdapter adapter = new AccountsAdapter(this, objects, accountsDAO);
-
-		ListView listView = (ListView) findViewById(R.id.accounts_listing);
-		listView.setAdapter(adapter);
+		if (objects != null) {
+			objects.clear();
+			adapter.notifyDataSetChanged();
+		}
 	}
 
 	public void refreshList() {

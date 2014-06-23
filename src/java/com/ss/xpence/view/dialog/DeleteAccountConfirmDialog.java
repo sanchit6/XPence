@@ -1,8 +1,5 @@
 package com.ss.xpence.view.dialog;
 
-import com.ss.xpence.AccountsView;
-import com.ss.xpence.dataaccess.AccountsDAO;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -11,14 +8,17 @@ import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.widget.Toast;
 
-public class DeleteConfirmDialog extends DialogFragment {
+import com.ss.xpence.AccountsView;
+import com.ss.xpence.dataaccess.AccountsDAO;
+
+public class DeleteAccountConfirmDialog extends DialogFragment {
 
 	private String message;
 	private String finalMessage;
 	private CharSequence itemId;
 	private AccountsDAO accountsDAO;
 
-	public DeleteConfirmDialog(AccountsDAO accountsDAO, CharSequence itemName, CharSequence itemId) {
+	public DeleteAccountConfirmDialog(AccountsDAO accountsDAO, CharSequence itemName, CharSequence itemId) {
 		this.message = "Confirm Deletion of " + itemName + "?";
 		this.finalMessage = "Deleted Account: " + itemName;
 		this.itemId = itemId;
