@@ -12,7 +12,9 @@ import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.Space;
 
+import com.ss.xpence.app.ResourceManager;
 import com.ss.xpence.dataaccess.AccountsDAO;
+import com.ss.xpence.exception.ResourceException;
 import com.ss.xpence.model.AccountModel;
 import com.ss.xpence.util.ConverterUtils;
 import com.ss.xpence.view.DummyView;
@@ -22,7 +24,11 @@ public class AccountEditor extends Activity {
 	private boolean isExisting = false;
 	private long accountId;
 
-	private AccountsDAO accountsDAO = new AccountsDAO();
+	private AccountsDAO accountsDAO;
+
+	public AccountEditor() throws ResourceException {
+		accountsDAO = ResourceManager.get(AccountsDAO.class);
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -57,7 +63,7 @@ public class AccountEditor extends Activity {
 			}
 
 			isExisting = true;
-			accountId = Long.valueOf(bundle.getString("-1"));
+			accountId = bundle.getLong("-1");
 		} else {
 			isExisting = false;
 		}
@@ -113,7 +119,7 @@ public class AccountEditor extends Activity {
 	public void onAddCardRow(View view) {
 		// EditText bet = (EditText) findViewById(R.id.editText_card);
 
-		EditText et = new EditText(getBaseContext());
+		EditText et = new EditText(getApplicationContext());
 		// MarginLayoutParams marginLayoutParams = new
 		// MarginLayoutParams(LayoutParams.WRAP_CONTENT,
 		// LayoutParams.WRAP_CONTENT);
@@ -122,9 +128,8 @@ public class AccountEditor extends Activity {
 		et.setEms(11);
 		et.setInputType(InputType.TYPE_CLASS_NUMBER);
 		et.setSingleLine(true);
-		et.setBackgroundColor(Color.WHITE);
 		et.setTextColor(Color.BLACK);
-		et.setHint("Enter Card No.");
+		// et.setHint("Enter Card No.");
 
 		if (view instanceof DummyView) {
 			et.setText(((DummyView) view).get("text"));

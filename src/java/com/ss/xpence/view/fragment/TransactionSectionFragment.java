@@ -14,11 +14,13 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.ss.xpence.adapter.TransactionsAdapter;
+import com.ss.xpence.app.ResourceManager;
 import com.ss.xpence.content.handler.MessagesHandler;
 import com.ss.xpence.dataaccess.PreferencesDAO;
 import com.ss.xpence.dataaccess.SendersDAO;
 import com.ss.xpence.dataaccess.TransactionsDAO;
 import com.ss.xpence.dataaccess.base.AbstractDAO.Filter;
+import com.ss.xpence.exception.ResourceException;
 import com.ss.xpence.model.AccountModel;
 import com.ss.xpence.model.SMSModel;
 import com.ss.xpence.model.SenderModel;
@@ -31,12 +33,16 @@ import com.ss.xpence.view.IView;
 public class TransactionSectionFragment extends Fragment implements IView {
 	private List<TransactionModel> transactions;
 
-	private SendersDAO sendersDAO = new SendersDAO();
-	private TransactionsDAO transactionsDAO = new TransactionsDAO();
-	private PreferencesDAO preferencesDAO = new PreferencesDAO();
+	private SendersDAO sendersDAO;
+	private TransactionsDAO transactionsDAO;
+	private PreferencesDAO preferencesDAO;
 
-	public TransactionSectionFragment() {
+	public TransactionSectionFragment() throws ResourceException {
 		transactions = new ArrayList<TransactionModel>();
+
+		sendersDAO = ResourceManager.get(SendersDAO.class);
+		transactionsDAO = ResourceManager.get(TransactionsDAO.class);
+		preferencesDAO = ResourceManager.get(PreferencesDAO.class);
 	}
 
 	public static final String BANK_NAME = "bankname";

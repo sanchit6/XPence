@@ -54,20 +54,24 @@ public class PreferencesDAO extends AbstractDAO<Pair<String, String>> {
 	public Pair<String, String> queryById(Context context, String key) {
 		init(context);
 
-		Cursor c = database.query(getTableName(), null, "_id = ?", new String[] { key }, null, null, null);
+		Cursor c = null;
+		Pair<String, String> data = null;
 
 		try {
+			c = database.query(getTableName(), null, "_id = ?", new String[] { key }, null, null, null);
+
 			if (c.moveToFirst()) {
 				for (int i = 0; i < c.getCount(); i++) {
 					String value = c.getString(c.getColumnIndexOrThrow("value"));
-					return Pair.create(key, value);
+					data = Pair.create(key, value);
 				}
 			}
+
+			return data;
 		} finally {
 			IOUtils.closeQuietly(c);
 		}
 
-		return null;
 	}
 
 	@Override

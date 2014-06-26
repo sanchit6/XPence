@@ -1,18 +1,17 @@
 package com.ss.xpence;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.ss.xpence.app.ResourceManager;
+import com.ss.xpence.dataaccess.MongoConnector;
+import com.ss.xpence.exception.ResourceException;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Pair;
+import android.support.v4.app.NavUtils;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.ListView;
-
-import com.ss.xpence.adapter.MainScreenListingAdapter;
-import com.ss.xpence.dataaccess.PreferencesDAO;
+import android.widget.Toast;
 
 public class Main extends Activity {
 
@@ -21,17 +20,16 @@ public class Main extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		List<String> objects = new ArrayList<String>();
-/*
-		List<Pair<String, String>> r = new PreferencesDAO().queryAll(getBaseContext());
-		for (Pair<String, String> pair : r) {
-			objects.add(pair.first + " - " + pair.second);
-		}*/
+		// Load the Parsers from MongoDB at the startup
+		try {
+			MongoConnector c = ResourceManager.get(MongoConnector.class);
+			c.asyncFetchAndCache();
+		} catch (ResourceException e) {
+			throw new RuntimeException(e);
+		} catch (InterruptedException e) {
+			throw new RuntimeException(e);
+		}
 
-		MainScreenListingAdapter adapter = new MainScreenListingAdapter(this, objects);
-
-		ListView listView = (ListView) findViewById(R.id.main_screen_listing);
-		listView.setAdapter(adapter);
 	}
 
 	@Override
@@ -40,10 +38,41 @@ public class Main extends Activity {
 		return true;
 	}
 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case android.R.id.home:
+				NavUtils.navigateUpFromSameTask(this);
+				return true;
+			case R.id.menu_settings:
+				Intent intent = new Intent(getBaseContext(), Settings.class);
+				startActivity(intent);
+				break;
+			case R.id.main_log_viewer:
+				intent = new Intent(getBaseContext(), LogViewer.class);
+				startActivity(intent);
+				break;
+			default:
+				break;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
 	/**
 	 * @param view
 	 */
 	public void onLoadTransactions(View view) {
+		MongoConnector c;
+		try {
+			c = ResourceManager.get(MongoConnector.class);
+			if (c.fetchCache() == null) {
+				Toast.makeText(getApplicationContext(), "Loading Parsers.. Please Wait!!", Toast.LENGTH_SHORT).show();
+				return;
+			}
+		} catch (ResourceException e) {
+			throw new RuntimeException(e);
+		}
+
 		Intent intent = new Intent(getBaseContext(), TransactionsView.class);
 		startActivity(intent);
 	}
@@ -64,11 +93,4 @@ public class Main extends Activity {
 		startActivity(intent);
 	}
 
-	/**
-	 * @param view
-	 */
-	public void onLoadSettings(View view) {
-		Intent intent = new Intent(getBaseContext(), Settings.class);
-		startActivity(intent);
-	}
 }

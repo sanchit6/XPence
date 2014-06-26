@@ -2,8 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#333333" >
+    android:layout_height="match_parent" >
 
     <GridLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -21,14 +20,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Account Name"
-            android:textColor="@color/White"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textSize="15dp" />
 
         <EditText
             android:id="@+id/editText_accName"
             android:layout_width="182dp"
-            android:background="@android:color/white"
             android:ems="13"
             android:inputType="text"
             android:singleLine="true" >
@@ -39,14 +36,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Bank Name"
-            android:textColor="@color/White"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textSize="15dp" />
 
         <EditText
             android:id="@+id/editText_bank"
             android:layout_width="182dp"
-            android:background="@android:color/white"
             android:ems="13"
             android:inputType="text"
             android:singleLine="true" >
@@ -57,14 +52,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Account Number"
-            android:textColor="@color/White"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textSize="15dp" />
 
         <EditText
             android:id="@+id/editText_account"
             android:layout_width="182dp"
-            android:background="@android:color/white"
             android:ems="13"
             android:inputType="number"
             android:singleLine="true" >
@@ -75,14 +68,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Card Number"
-            android:textColor="@color/White"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textSize="15dp" />
 
         <EditText
             android:id="@+id/editText_card"
             android:layout_width="182dp"
-            android:background="@android:color/white"
             android:ems="13"
             android:inputType="number"
             android:singleLine="true" >

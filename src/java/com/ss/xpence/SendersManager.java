@@ -13,16 +13,23 @@ import android.widget.CheckBox;
 import android.widget.ListView;
 
 import com.ss.xpence.adapter.SenderAdapter;
+import com.ss.xpence.app.ResourceManager;
 import com.ss.xpence.content.handler.MessagesHandler;
 import com.ss.xpence.dataaccess.AccountsDAO;
 import com.ss.xpence.dataaccess.SendersDAO;
+import com.ss.xpence.exception.ResourceException;
 import com.ss.xpence.model.AccountModel;
 import com.ss.xpence.model.SenderModel;
 
 public class SendersManager extends Activity {
 
-	private AccountsDAO accountsDB = new AccountsDAO();
-	private SendersDAO sendersDAO = new SendersDAO();
+	private AccountsDAO accountsDB;
+	private SendersDAO sendersDAO;
+
+	public SendersManager() throws ResourceException {
+		accountsDB = ResourceManager.get(AccountsDAO.class);
+		sendersDAO = ResourceManager.get(SendersDAO.class);
+	}
 
 	private SenderAdapter adapter;
 	private List<SenderModel> objects;

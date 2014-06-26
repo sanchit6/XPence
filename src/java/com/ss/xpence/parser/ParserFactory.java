@@ -11,6 +11,10 @@ import java.util.Properties;
 
 import android.content.res.AssetManager;
 
+import com.mongodb.DBObject;
+import com.ss.xpence.app.ResourceManager;
+import com.ss.xpence.dataaccess.MongoConnector;
+import com.ss.xpence.exception.ResourceException;
 import com.ss.xpence.util.IOUtils;
 
 public class ParserFactory {
@@ -20,7 +24,8 @@ public class ParserFactory {
 	private static Map<String, List<AbstractParser>> parserCache = new HashMap<String, List<AbstractParser>>();
 
 	public static List<AbstractParser> makeParser(String key, AssetManager assetManager) throws IOException {
-		init(assetManager);
+		// initFromFile(assetManager);
+		initFromMongo();
 
 		if (parserCache.containsKey(key)) {
 			return parserCache.get(key);
@@ -56,7 +61,7 @@ public class ParserFactory {
 		return parsers;
 	}
 
-	private static void init(AssetManager assetManager) throws IOException {
+	private static void initFromFile(AssetManager assetManager) throws IOException {
 		if (init) {
 			return;
 		}
@@ -75,4 +80,31 @@ public class ParserFactory {
 		init = true;
 	}
 
+	private static void initFromMongo() throws IOException {
+		if (init) {
+			return;
+		}
+
+		Map<String, Integer> indexer = new HashMap<String, Integer>();
+
+		try {
+			MongoConnector c = ResourceManager.get(MongoConnector.class);
+
+			List<DBObject> oList = c.fetchCache();
+			for (DBObject o : oList) {
+				String bank = o.get("bank").toString();
+				int index = indexer.containsKey(bank) ? indexer.get(bank) + 1 : 1;
+				indexer.put(bank, index);
+
+				props.put("amount-" + bank + "-" + index, o.get("amount"));
+				props.put("location-" + bank + "-" + index, o.get("location"));
+				props.put("contains-" + bank + "-" + index, o.get("contains"));
+			}
+
+		} catch (ResourceException e) {
+			throw new IOException(e);
+		}
+
+		init = true;
+	}
 }

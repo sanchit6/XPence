@@ -11,11 +11,11 @@ import android.widget.TextView;
 
 import com.ss.xpence.R;
 
-public class MainScreenListingAdapter extends ArrayAdapter<String> {
+public class LogAdapter extends ArrayAdapter<String> {
 
 	private final Activity context;
 
-	public MainScreenListingAdapter(Activity context, List<String> objects) {
+	public LogAdapter(Activity context, List<String> objects) {
 		super(context, R.layout.account_layout, objects);
 
 		this.context = context;

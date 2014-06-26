@@ -1,4 +1,4 @@
-package com.ss.xpence.util;
+package com.ss.xpence.app;
 
 public class Constants {
 

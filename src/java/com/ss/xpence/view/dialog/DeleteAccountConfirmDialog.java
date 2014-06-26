@@ -25,6 +25,10 @@ public class DeleteAccountConfirmDialog extends DialogFragment {
 		this.accountsDAO = accountsDAO;
 	}
 
+	public DeleteAccountConfirmDialog(AccountsDAO accountsDAO, String itemName, long itemId) {
+		this(accountsDAO, itemName, String.valueOf(itemId));
+	}
+
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());

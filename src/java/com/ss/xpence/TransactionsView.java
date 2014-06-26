@@ -12,17 +12,24 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.ss.xpence.app.ResourceManager;
 import com.ss.xpence.dataaccess.AccountsDAO;
 import com.ss.xpence.dataaccess.PreferencesDAO;
 import com.ss.xpence.dataaccess.TransactionsDAO;
+import com.ss.xpence.exception.ResourceException;
 import com.ss.xpence.model.AccountModel;
 import com.ss.xpence.util.ConverterUtils;
 import com.ss.xpence.view.fragment.TransactionSectionFragment;
 
 public class TransactionsView extends FragmentActivity {
 
-	private TransactionsDAO transactionsDAO = new TransactionsDAO();
-	private PreferencesDAO preferencesDAO = new PreferencesDAO();
+	private TransactionsDAO transactionsDAO;
+	private PreferencesDAO preferencesDAO;
+
+	public TransactionsView() throws ResourceException {
+		transactionsDAO = ResourceManager.get(TransactionsDAO.class);
+		preferencesDAO = ResourceManager.get(PreferencesDAO.class);
+	}
 
 	/**
 	 * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -93,7 +100,12 @@ public class TransactionsView extends FragmentActivity {
 
 		@Override
 		public Fragment getItem(int i) {
-			Fragment fragment = new TransactionSectionFragment();
+			Fragment fragment;
+			try {
+				fragment = new TransactionSectionFragment();
+			} catch (ResourceException e) {
+				throw new RuntimeException(e);
+			}
 			Bundle args = new Bundle();
 			AccountModel accountModel = entities.get(i);
 

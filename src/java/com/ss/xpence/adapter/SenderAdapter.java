@@ -50,6 +50,10 @@ public class SenderAdapter extends ArrayAdapter<SenderModel> {
 
 			h2.get().setOnItemSelectedListener(new OnItemSelectedListener() {
 				public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+					if (view == null) {
+						return;
+					}
+
 					clearMargins(view);
 					clearMargins(view.findViewById(R.id.list_item_1));
 
