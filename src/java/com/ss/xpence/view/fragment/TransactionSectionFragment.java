@@ -106,7 +106,7 @@ public class TransactionSectionFragment extends Fragment implements IView {
 
 		List<AbstractParser> parsers;
 		try {
-			parsers = ParserFactory.makeParser(senderModel.getSelectedBank(), this.getResources().getAssets());
+			parsers = ParserFactory.makeParser(senderModel.getSelectedBank(), this.getActivity());
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}

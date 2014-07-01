@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.ss.xpence.dataaccess.AccountsDAO;
 import com.ss.xpence.dataaccess.MongoConnector;
+import com.ss.xpence.dataaccess.ParsersDAO;
 import com.ss.xpence.dataaccess.PreferencesDAO;
 import com.ss.xpence.dataaccess.SendersDAO;
 import com.ss.xpence.dataaccess.SettingsDAO;
@@ -23,6 +24,7 @@ public class ResourceManager {
 		resources.put(SettingsDAO.class, new SettingsDAO());
 		resources.put(TransactionsDAO.class, new TransactionsDAO());
 		resources.put(MongoConnector.class, new MongoConnector());
+		resources.put(ParsersDAO.class, new ParsersDAO());
 	}
 
 	@SuppressWarnings("unchecked")

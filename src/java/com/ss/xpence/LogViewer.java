@@ -31,7 +31,7 @@ public class LogViewer extends Activity {
 		List<String> objects = new ArrayList<String>();
 		LogAdapter adapter = new LogAdapter(this, objects);
 
-		connector.fetch(adapter);
+		connector.doFetchFromCacheAndUpdateAdapter(adapter);
 
 		/*
 		 * List<Pair<String, String>> r = new

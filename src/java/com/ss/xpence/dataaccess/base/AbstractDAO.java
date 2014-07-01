@@ -69,6 +69,20 @@ public abstract class AbstractDAO<T> implements GenericDAO {
 		}
 	}
 
+	public void delete(Context context) {
+		init(context);
+
+		database.beginTransaction();
+
+		try {
+			database.delete(getTableName(), null, null);
+
+			database.setTransactionSuccessful();
+		} finally {
+			database.endTransaction();
+		}
+	}
+
 	public long insert(Context context, T model) {
 		init(context);
 
@@ -120,6 +134,16 @@ public abstract class AbstractDAO<T> implements GenericDAO {
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 			db.execSQL("DROP TABLE IF EXISTS " + abstractDAO.getTableName());
 			onCreate(db);
+		}
+
+		@Override
+		public void onOpen(SQLiteDatabase db) {
+			super.onOpen(db);
+			for (Entry<Object, Object> entry : props.entrySet()) {
+				if (entry.getKey().equals(abstractDAO.getTableName())) {
+					db.execSQL((String) entry.getValue());
+				}
+			}
 		}
 
 	}

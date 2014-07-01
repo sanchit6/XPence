@@ -1,9 +1,5 @@
 package com.ss.xpence;
 
-import com.ss.xpence.app.ResourceManager;
-import com.ss.xpence.dataaccess.MongoConnector;
-import com.ss.xpence.exception.ResourceException;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +9,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.ss.xpence.app.ResourceManager;
+import com.ss.xpence.dataaccess.MongoConnector;
+import com.ss.xpence.dataaccess.ParsersDAO;
+import com.ss.xpence.exception.ResourceException;
+
 public class Main extends Activity {
 
 	@Override
@@ -20,10 +21,13 @@ public class Main extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		// Load the Parsers from MongoDB at the startup
+		// Load the Parsers from MongoDB at the startup if needed
 		try {
-			MongoConnector c = ResourceManager.get(MongoConnector.class);
-			c.asyncFetchAndCache();
+			int countInDb = ResourceManager.get(ParsersDAO.class).queryAll(this).size();
+
+			if (countInDb == 0) {
+				ResourceManager.get(MongoConnector.class).doFetchInBackground(this);
+			}
 		} catch (ResourceException e) {
 			throw new RuntimeException(e);
 		} catch (InterruptedException e) {
@@ -52,6 +56,16 @@ public class Main extends Activity {
 				intent = new Intent(getBaseContext(), LogViewer.class);
 				startActivity(intent);
 				break;
+			case R.id.main_reload_parsers:
+				try {
+					ResourceManager.get(ParsersDAO.class).delete(this);
+					ResourceManager.get(MongoConnector.class).doFetchInBackground(this);
+				} catch (ResourceException e) {
+					throw new RuntimeException(e);
+				} catch (InterruptedException e) {
+					throw new RuntimeException(e);
+				}
+				break;
 			default:
 				break;
 		}
@@ -65,7 +79,7 @@ public class Main extends Activity {
 		MongoConnector c;
 		try {
 			c = ResourceManager.get(MongoConnector.class);
-			if (c.fetchCache() == null) {
+			if (c.isFetchInProgress()) {
 				Toast.makeText(getApplicationContext(), "Loading Parsers.. Please Wait!!", Toast.LENGTH_SHORT).show();
 				return;
 			}

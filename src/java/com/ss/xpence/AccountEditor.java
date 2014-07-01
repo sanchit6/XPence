@@ -117,18 +117,17 @@ public class AccountEditor extends Activity {
 	 * @param view
 	 */
 	public void onAddCardRow(View view) {
-		// EditText bet = (EditText) findViewById(R.id.editText_card);
+		EditText bet = (EditText) findViewById(R.id.editText_card);
 
-		EditText et = new EditText(getApplicationContext());
-		// MarginLayoutParams marginLayoutParams = new
-		// MarginLayoutParams(LayoutParams.WRAP_CONTENT,
-		// LayoutParams.WRAP_CONTENT);
-		// marginLayoutParams.setMargins(0, 5, 0, 10);
-		// et.setLayoutParams(marginLayoutParams);
+		EditText et = new EditText(bet.getContext());
 		et.setEms(11);
 		et.setInputType(InputType.TYPE_CLASS_NUMBER);
 		et.setSingleLine(true);
 		et.setTextColor(Color.BLACK);
+
+		final float scale = getBaseContext().getResources().getDisplayMetrics().density;
+		int pixels = (int) (182 * scale + 0.5f);
+		et.setWidth(pixels);
 		// et.setHint("Enter Card No.");
 
 		if (view instanceof DummyView) {

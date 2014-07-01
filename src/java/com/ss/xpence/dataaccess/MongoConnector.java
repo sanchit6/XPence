@@ -6,13 +6,18 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
+import android.content.Context;
 import android.os.AsyncTask;
 
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
+import com.ss.xpence.Main;
 import com.ss.xpence.adapter.LogAdapter;
+import com.ss.xpence.app.ResourceManager;
+import com.ss.xpence.exception.ResourceException;
+import com.ss.xpence.model.ParsersModel;
 
 public class MongoConnector {
 
@@ -21,7 +26,11 @@ public class MongoConnector {
 
 	private Semaphore _lock = new Semaphore(1);
 
-	public List<DBObject> fetchCache() {
+	public boolean isFetchInProgress() {
+		return _lock.availablePermits() == 0;
+	}
+
+	public List<DBObject> doFetchFromCache() {
 		if (!_lock.tryAcquire()) {
 			return null;
 		}
@@ -33,7 +42,7 @@ public class MongoConnector {
 		}
 	}
 
-	public void asyncFetchAndCache() throws InterruptedException {
+	public void doFetchInBackground(final Context context) throws InterruptedException {
 		_lock.acquire();
 		// _lock.availablePermits()
 
@@ -41,7 +50,7 @@ public class MongoConnector {
 
 			@Override
 			protected List<DBObject> doInBackground(String... params) {
-				return fetch();
+				return fetch(context);
 			}
 
 			protected void onPostExecute(List<DBObject> result) {
@@ -52,13 +61,13 @@ public class MongoConnector {
 		}.execute("");
 	}
 
-	public void fetch(final LogAdapter adapter) {
+	public void doFetchFromCacheAndUpdateAdapter(final LogAdapter adapter) {
 		new AsyncTask<String, Void, List<String>>() {
 
 			@Override
 			protected List<String> doInBackground(String... params) {
 				List<DBObject> objects;
-				objects = fetchCache();
+				objects = doFetchFromCache();
 				List<String> z = new ArrayList<String>();
 
 				for (DBObject o : objects) {
@@ -75,25 +84,33 @@ public class MongoConnector {
 		}.execute("");
 	}
 
-	private List<DBObject> fetch() {
+	private List<DBObject> fetch(Context context) {
 		MongoClient client;
 		try {
 			client = new MongoClient(new MongoClientURI(uri));
 		} catch (UnknownHostException e) {
-			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
 
-		DBCursor x = client.getDB("sanchit_test").getCollection("app_parsers").find();
+		DBCursor cursor = client.getDB("sanchit_test").getCollection("app_parsers").find();
 
-		List<DBObject> z = new ArrayList<DBObject>();
-		while (x.hasNext()) {
-			z.add(x.next());
+		List<DBObject> response = new ArrayList<DBObject>();
+		while (cursor.hasNext()) {
+			DBObject _x = cursor.next();
+			response.add(_x);
+
+			try {
+				ParsersDAO parsersDAO = ResourceManager.get(ParsersDAO.class);
+				ParsersModel model = ParsersModel.newModel(_x);
+				parsersDAO.insert(context, model );
+			} catch (ResourceException e) {
+				throw new RuntimeException(e);
+			}
 		}
 
-		x.close();
+		cursor.close();
 		client.close();
 
-		return z;
+		return response;
 	}
 }

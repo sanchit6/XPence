@@ -8,4 +8,9 @@
         android:title="@string/log_viewer"
         android:orderInCategory="100"
         android:showAsAction="never" />
+    
+    <item android:id="@+id/main_reload_parsers"
+        android:title="@string/reload_parsers_server"
+        android:orderInCategory="100"
+        android:showAsAction="never" />
 </menu>

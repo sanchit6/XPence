@@ -25,5 +25,6 @@
     <string name="delete">Delete</string>
     <string name="title_activity_log_viewer">LogViewer</string>
     <string name="log_viewer">Log Viewer</string>
+    <string name="reload_parsers_server">Reload Parsers from Server</string>
 
 </resources>
