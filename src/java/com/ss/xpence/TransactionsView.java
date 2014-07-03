@@ -114,6 +114,7 @@ public class TransactionsView extends FragmentActivity {
 			args.putString(TransactionSectionFragment.CARD_NO,
 				ConverterUtils.accumulate(accountModel.getCardNumbers(), ","));
 			args.putLong(TransactionSectionFragment.ACCOUNT_ID, accountModel.getAccountId());
+			args.putInt(TransactionSectionFragment.ROLLOVER_DATE, accountModel.getRolloverDate());
 
 			fragment.setArguments(args);
 			return fragment;

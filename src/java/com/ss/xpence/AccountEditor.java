@@ -8,9 +8,11 @@ import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.Space;
+import android.widget.Spinner;
 
 import com.ss.xpence.app.ResourceManager;
 import com.ss.xpence.dataaccess.AccountsDAO;
@@ -35,6 +37,12 @@ public class AccountEditor extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_account_editor);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
+
+		Spinner rolloverDateSpinner = (Spinner) findViewById(R.id.editText_rolloverdate);
+		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.rollover_dates,
+			android.R.layout.simple_spinner_item);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		rolloverDateSpinner.setAdapter(adapter);
 
 		Bundle bundle = getIntent().getExtras();
 
@@ -81,6 +89,11 @@ public class AccountEditor extends Activity {
 	public void onFormSubmitted(View view) {
 		AccountModel model = new AccountModel();
 
+		Spinner rolloverDateSpinner = (Spinner) findViewById(R.id.editText_rolloverdate);
+		Object selectedItem = rolloverDateSpinner.getSelectedItem();
+		Integer rolloverDate = selectedItem == null ? null : Integer.parseInt(selectedItem.toString());
+
+		model.setRolloverDate(rolloverDate);
 		model.setAccountName(((EditText) findViewById(R.id.editText_accName)).getText().toString());
 		model.setAccountNumber(((EditText) findViewById(R.id.editText_account)).getText().toString());
 		model.setBankName(((EditText) findViewById(R.id.editText_bank)).getText().toString());

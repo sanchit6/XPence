@@ -18,7 +18,7 @@ import com.ss.xpence.view.dialog.MessageDialog;
 
 public class TransactionsAdapter extends ArrayAdapter<TransactionModel> {
 
-	private static final String STATEMENT = "STATEMENT";
+	public static final String STATEMENT = "STATEMENT";
 
 	private final Activity context;
 
@@ -65,6 +65,10 @@ public class TransactionsAdapter extends ArrayAdapter<TransactionModel> {
 
 		layout.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
+				if (transactionModel.getParentModel() == null || transactionModel.getParentModel().getMessage() == null) {
+					return;
+				}
+
 				new MessageDialog(transactionModel.getParentModel().getMessage()).show(context.getFragmentManager(),
 					"1");
 			}

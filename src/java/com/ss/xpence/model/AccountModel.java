@@ -11,11 +11,20 @@ public class AccountModel {
 
 	private String accountNumber;
 	private List<CardModel> cardNumbers;
+	private Integer rolloverDate;
 
 	public static AccountModel create(long accountId) {
 		AccountModel m = new AccountModel();
 		m.setAccountId(accountId);
 		return m;
+	}
+
+	public Integer getRolloverDate() {
+		return rolloverDate;
+	}
+
+	public void setRolloverDate(Integer rolloverDate) {
+		this.rolloverDate = rolloverDate;
 	}
 
 	public long getAccountId() {

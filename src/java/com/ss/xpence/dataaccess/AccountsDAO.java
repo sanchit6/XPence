@@ -38,6 +38,7 @@ public class AccountsDAO extends AbstractDAO<AccountModel> {
 					model.setBankName(c.getString(c.getColumnIndexOrThrow("bank_name")));
 					model.setAccountNumber(c.getString(c.getColumnIndexOrThrow("account_number")));
 					model.setAccountId(c.getInt(c.getColumnIndexOrThrow("_id")));
+					model.setRolloverDate(c.getInt(c.getColumnIndexOrThrow("rollover_date")));
 
 					List<CardModel> allCards = cardsDAO.queryAll(context);
 					for (CardModel card : allCards) {
@@ -70,6 +71,7 @@ public class AccountsDAO extends AbstractDAO<AccountModel> {
 		contentValues.put("account_name", model.getAccountName());
 		contentValues.put("bank_name", model.getBankName());
 		contentValues.put("account_number", model.getAccountNumber());
+		contentValues.put("rollover_date", model.getRolloverDate());
 
 		return contentValues;
 	}

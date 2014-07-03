@@ -3,6 +3,7 @@ package com.ss.xpence.view.fragment;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import android.os.Bundle;
@@ -49,6 +50,7 @@ public class TransactionSectionFragment extends Fragment implements IView {
 	public static final String ACCOUNT_NO = "accountno";
 	public static final String ACCOUNT_ID = "accountid";
 	public static final String CARD_NO = "cardno";
+	public static final String ROLLOVER_DATE = "rolloverdate";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -59,6 +61,7 @@ public class TransactionSectionFragment extends Fragment implements IView {
 		String accountNo = args.getString(ACCOUNT_NO);
 		long accId = args.getLong(ACCOUNT_ID);
 		String[] cardNos = args.getString(CARD_NO).split(",");
+		int rolloverDate = args.getInt(ROLLOVER_DATE);
 
 		// First load the transactions that have already been parsed
 		transactions = transactionsDAO.queryByFilter(getActivity(),
@@ -68,6 +71,41 @@ public class TransactionSectionFragment extends Fragment implements IView {
 		loadTransactionList(bankName, accountNo, cardNos, accId);
 
 		Collections.sort(transactions, new TransactionModelComparator());
+
+		insertRolloverPoints(rolloverDate);
+
+		Collections.sort(transactions, new TransactionModelComparator());
+
+		sumUpAtRolloverPoints();
+	}
+
+	private void sumUpAtRolloverPoints() {
+		Double sum = 0d;
+		for (int i = transactions.size() - 1; i >= 0; i--) {
+			TransactionModel t = transactions.get(i);
+
+			if (TransactionsAdapter.STATEMENT.equals(t.getLocation())) {
+				t.setAmount(sum);
+				sum = 0d;
+			} else {
+				sum += t.getAmount() != null ? t.getAmount() : 0d;
+			}
+		}
+	}
+
+	private void insertRolloverPoints(int rolloverDate) {
+		Date latestDate = transactions.get(0).getDate();
+		Date oldestDate = transactions.get(transactions.size() - 1).getDate();
+
+		int ul = new Date().getMonth() > latestDate.getMonth() ? new Date().getMonth() : latestDate.getMonth();
+
+		for (int i = oldestDate.getMonth(); i <= ul; i++) {
+			TransactionModel t = new TransactionModel();
+			t.setDate(new Date(oldestDate.getYear(), i, rolloverDate));
+			t.setLocation(TransactionsAdapter.STATEMENT);
+			transactions.add(t);
+		}
+
 	}
 
 	@Override

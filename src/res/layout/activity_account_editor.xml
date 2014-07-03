@@ -46,6 +46,19 @@
             android:inputType="text"
             android:singleLine="true" >
         </EditText>
+        
+        <TextView
+            android:id="@+id/textView_rolloverdate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rollover Date"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="15dp" />
+
+        <Spinner
+            android:id="@+id/editText_rolloverdate"
+            android:layout_width="182dp"
+    		android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/textView_account"
