@@ -1,7 +1,6 @@
 package com.ss.xpence.model;
 
 import com.mongodb.DBObject;
-import com.ss.xpence.parser.BaseRegexParser;
 
 public class ParsersModel {
 

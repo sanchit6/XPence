@@ -15,7 +15,7 @@ import com.ss.xpence.util.ConverterUtils;
 
 public class AccountsAdapter extends ArrayAdapter<AccountModel> {
 
-	private String[] colors = { "#A20025", "#00ABA9", "#e3c800", "#60A917" };
+	private String[] colors = { "#99b433", "#7e3878", "#1d1d1d", "#00aba9", "#e3a21a", "#da532c" };
 
 	private final Activity context;
 

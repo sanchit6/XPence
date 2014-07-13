@@ -26,6 +26,10 @@
     <string name="title_activity_log_viewer">LogViewer</string>
     <string name="log_viewer">Log Viewer</string>
     <string name="reload_parsers_server">Reload Parsers from Server</string>
+    
+    <string name="drawer_open">Drawer Open</string>
+    <string name="drawer_close">Drawer Close</string>
+    
 
     <string-array name="rollover_dates">
         <item>1</item>
@@ -60,5 +64,7 @@
         <item>30</item>
         <item>31</item>
     </string-array>
+
+    <string name="title_activity_main_v2">XPence</string>
 
 </resources>

@@ -13,7 +13,6 @@ import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
-import com.ss.xpence.Main;
 import com.ss.xpence.adapter.LogAdapter;
 import com.ss.xpence.app.ResourceManager;
 import com.ss.xpence.exception.ResourceException;

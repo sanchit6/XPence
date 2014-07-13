@@ -27,6 +27,11 @@
     </style>
 
     <style name="AppTheme" parent="android:Theme.Light" />
+    
+    <color name="Color1">#001E4E</color>
+    <color name="Color2">#006AC1</color>
+    <color name="Color3">#261300</color>
+    <color name="Color4">#543A24</color>
 
     <color name="White">#FFFFFF</color>
     <color name="Ivory">#FFFFF0</color>

@@ -2,13 +2,13 @@ package com.ss.xpence.adapter;
 
 import java.util.List;
 
+import com.ss.xpence.R;
+
 import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-
-import com.ss.xpence.R;
 
 public class SimpleListItem1Adapter extends ArrayAdapter<String> {
 
