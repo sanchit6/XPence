@@ -3,6 +3,7 @@ package com.ss.xpence;
 import java.util.Arrays;
 
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -21,13 +22,14 @@ import com.ss.xpence.app.ResourceManager;
 import com.ss.xpence.dataaccess.MongoConnector;
 import com.ss.xpence.dataaccess.ParsersDAO;
 import com.ss.xpence.exception.ResourceException;
+import com.ss.xpence.view.fragment.HomeFragment;
 
 public class MainV2 extends Activity {
 	private ListView mDrawerList;
 
 	private DrawerLayout mDrawerLayout;
 	private ActionBarDrawerToggle mDrawerToggle;
-	
+
 	private String[] mItems = { "Transactions", "Accounts", "Senders", "Parsers" };
 
 	@Override
@@ -102,6 +104,10 @@ public class MainV2 extends Activity {
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
 
+		// Replace the fragment
+		FragmentManager fragmentManager = getFragmentManager();
+		fragmentManager.beginTransaction().replace(R.id.main_content_frame, new HomeFragment()).commit();
+
 		// Load the Parsers from MongoDB at the startup if needed
 		try {
 			int countInDb = ResourceManager.get(ParsersDAO.class).queryAll(this).size();
@@ -157,13 +163,13 @@ public class MainV2 extends Activity {
 		super.onConfigurationChanged(newConfig);
 		mDrawerToggle.onConfigurationChanged(newConfig);
 	}
-	
+
 	@Override
 	protected void onPause() {
 		super.onPause();
-		
+
 		boolean isVisible = mDrawerLayout.isDrawerOpen(mDrawerList);
-		if(isVisible) {
+		if (isVisible) {
 			mDrawerLayout.closeDrawer(mDrawerList);
 		}
 	}

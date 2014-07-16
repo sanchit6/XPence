@@ -47,8 +47,9 @@ public class AccountsAdapter extends ArrayAdapter<AccountModel> {
 		accNameLabel.setText(model.getAccountName());
 		accIdLabel.setText(String.valueOf(model.getAccountId()));
 
-		iconBankLabel.setText(model.getBankName().substring(0, 1).toUpperCase());
-		iconBankLabel.setBackgroundColor(Color.parseColor(colors[position % 4]));
+		iconBankLabel.setText(model.getBankName() != null && model.getBankName().length() > 0 ? model.getBankName()
+			.substring(0, 1).toUpperCase() : null);
+		iconBankLabel.setBackgroundColor(Color.parseColor(colors[position % colors.length]));
 
 		return view;
 	}
