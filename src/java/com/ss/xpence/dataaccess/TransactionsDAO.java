@@ -17,6 +17,7 @@ import com.ss.xpence.util.IOUtils;
 
 public class TransactionsDAO extends AbstractDAO<TransactionModel> {
 	public static final String ACCOUNT_ID = "account_id";
+	public static final String MIN_DATE = "min_date";
 
 	@Override
 	protected String getTableName() {
@@ -47,11 +48,21 @@ public class TransactionsDAO extends AbstractDAO<TransactionModel> {
 	@Override
 	public List<TransactionModel> queryByFilter(Context context, Filter filter) {
 		Long accountId = (Long) filter.get(ACCOUNT_ID);
+		Long startTime = (Long) filter.get(MIN_DATE);
 
 		init(context);
 
-		Cursor c = database.query(getTableName(), null, "account_id = ?", new String[] { String.valueOf(accountId) },
-			null, null, null);
+		String selection = "account_id = ?";
+		List<String> selectionArgs = new ArrayList<String>();
+		selectionArgs.add(String.valueOf(accountId));
+
+		if (startTime != null) {
+			selection += " and date >= ?";
+			selectionArgs.add(String.valueOf(startTime));
+		}
+
+		Cursor c = database.query(getTableName(), null, selection, selectionArgs.toArray(new String[] {}), null, null,
+			null);
 
 		List<TransactionModel> response = new ArrayList<TransactionModel>();
 

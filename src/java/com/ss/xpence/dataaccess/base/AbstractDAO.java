@@ -164,6 +164,11 @@ public abstract class AbstractDAO<T> implements GenericDAO {
 			f.put(key, value);
 			return f;
 		}
+
+		public Filter append(String key, Object value) {
+			this.put(key, value);
+			return this;
+		}
 	}
 
 }

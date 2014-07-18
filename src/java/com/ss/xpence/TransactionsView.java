@@ -51,10 +51,13 @@ public class TransactionsView extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_transactions_view);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
-		// Create the adapter that will return a fragment for each of the three
-		// primary sections
-		// of the app.
-		mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+		// Create the adapter that will return a fragment for each of the
+		// primary sections of the app.
+		try {
+			mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+		} catch (ResourceException e) {
+			throw new RuntimeException(e);
+		}
 
 		// Set up the ViewPager with the sections adapter.
 		mViewPager = (ViewPager) findViewById(R.id.pager);
@@ -90,11 +93,12 @@ public class TransactionsView extends FragmentActivity {
 	public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
 		private List<AccountModel> entities;
-		private AccountsDAO accountsDAO = new AccountsDAO();
+		private AccountsDAO accountsDAO;
 
-		public SectionsPagerAdapter(FragmentManager fm) {
+		public SectionsPagerAdapter(FragmentManager fm) throws ResourceException {
 			super(fm);
 
+			accountsDAO = ResourceManager.get(AccountsDAO.class);
 			entities = accountsDAO.queryAll(getBaseContext());
 		}
 

@@ -104,12 +104,12 @@ public class MainV2 extends Activity {
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
 
-		// Replace the fragment
-		FragmentManager fragmentManager = getFragmentManager();
-		fragmentManager.beginTransaction().replace(R.id.main_content_frame, new HomeFragment()).commit();
-
-		// Load the Parsers from MongoDB at the startup if needed
 		try {
+			// Replace the fragment
+			FragmentManager fragmentManager = getFragmentManager();
+			fragmentManager.beginTransaction().replace(R.id.main_content_frame, new HomeFragment()).commit();
+
+			// Load the Parsers from MongoDB at the startup if needed
 			int countInDb = ResourceManager.get(ParsersDAO.class).queryAll(this).size();
 
 			if (countInDb == 0) {
